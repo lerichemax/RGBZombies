@@ -32,6 +32,6 @@ public class Health : MonoBehaviour
 
     protected virtual void Die()
     {
-        Destroy(gameObject);
+        gameObject.SetActive(false);
     }
 }

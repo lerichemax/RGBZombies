@@ -28,7 +28,7 @@ public class GroupIntelligence : MonoBehaviour
             {
                 _keyToSpawn.SetActive(true);
             }
-            Destroy(gameObject);
+            gameObject.SetActive(false);
         }
     }
 
@@ -44,7 +44,7 @@ public class GroupIntelligence : MonoBehaviour
     {
         for (int i = 0; i < _group.Length; i++)
         {
-            if (_group[i] != null)
+            if (_group[i].isActiveAndEnabled)
             {
                 return false;
             }

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TreeEditor;
 using UnityEngine;
 
 public class ExplosiveProjectile : MonoBehaviour
@@ -12,9 +13,21 @@ public class ExplosiveProjectile : MonoBehaviour
     private float _range = 10f;
     private float _initialForce = 1800f;
 
+    private GameObject _explosion;
+
+    private Rigidbody _rb;
+
     void Awake()
     {
-        GetComponent<Rigidbody>().AddForce(transform.forward * _initialForce);
+        _explosion = Instantiate(_explosionObject, transform.position, transform.rotation);
+        _explosion.SetActive(false);
+        _rb = GetComponent<Rigidbody>();
+    }
+
+    void OnEnable()
+    {
+        _rb.velocity = Vector3.zero;
+        _rb.AddForce(transform.forward * _initialForce);
     }
 
     void OnCollisionEnter(Collision other)
@@ -33,12 +46,16 @@ public class ExplosiveProjectile : MonoBehaviour
             ApplyExplosionDamage(other.gameObject);
         }
         Explode();
-        Destroy(gameObject);
+        gameObject.SetActive(false);
     }
 
     void Explode()
     {
-        Instantiate(_explosionObject, transform.position, transform.rotation);
+        _explosion.transform.position = transform.position;
+        _explosion.transform.rotation = transform.rotation;
+        _explosion.SetActive(true);
+        _explosion.GetComponent<ParticleSystem>().Play();
+        //Instantiate(_explosionObject, transform.position, transform.rotation);
 
         Collider[] colliders = Physics.OverlapSphere(transform.position, _range, Physics.AllLayers, QueryTriggerInteraction.Ignore);
 

@@ -8,11 +8,10 @@ public class AutoKill : MonoBehaviour
 
     private float _timer;
 
-    void Awake()
+    void OnEnable()
     {
         _timer = _delay;
     }
-
 
     void Update()
     {
@@ -23,7 +22,7 @@ public class AutoKill : MonoBehaviour
 
         if (_timer <= 0)
         {
-            Destroy(gameObject);
+            gameObject.SetActive(false);
         }
     }
 }
